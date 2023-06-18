@@ -1,0 +1,15 @@
+dialog {
+  background-color: rgba(32, 82, 221, 0.5);
+  color: white;
+  border-color: transparent;
+  overflow: hidden;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0 30px 8px #c5c1c1;
+  height: 100px;
+  width: 200px;
+}
+
+dialog div {
+  margin: 10px;
+}

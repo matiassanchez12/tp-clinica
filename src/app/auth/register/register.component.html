@@ -1,0 +1,296 @@
+<section>
+  <div
+    class="relative flex justify-center min-h-screen overflow-hidden lg:px-0 md:px-12"
+  >
+    <div
+      class="relative z-10 flex flex-col flex-1 px-4 py-10 bg-white shadow-2xl lg:py-24 md:flex-none md:px-28 sm:justify-center"
+    >
+      <div class="mt-4 absolute top-0 left-10">
+        <a
+          routerLink="/login"
+          class="font-semibold leading-6 text-sm cursor-pointer text-indigo-600 hover:text-indigo-500"
+          >Ir a Login</a
+        >
+      </div>
+      <div
+        class="w-full max-w-md h-full mx-auto md:max-w-sm md:px-0 md:w-96 sm:px-4"
+      >
+        <div class="flex flex-col mb-12">
+          <div>
+            <h2 class="text-4xl text-black">Comencemos!</h2>
+            <p class="mt-2 text-sm text-gray-500">
+              Para comenzar, crea tu cuenta.
+            </p>
+          </div>
+        </div>
+
+        <form [formGroup]="formRegister" (ngSubmit)="onSubmit()">
+          <p class="text-md text-red-500 px-2" *ngIf="userExist">
+            El email ingresado ya está siendo usado por otro usuario
+          </p>
+
+          <div>
+            <h3
+              class="mb-5 mt-8 text-sm font-medium text-gray-600 dark:text-white"
+            >
+              Seleccioná tu rol
+            </h3>
+
+            <ul class="grid w-full gap-6 md:grid-cols-2">
+              <app-card [subTitle]="'Paciente'" [inputName]="'patient'">
+                <input
+                  type="radio"
+                  id="patient"
+                  formControlName="specialty"
+                  name="specialty"
+                  value="patient"
+                  class="hidden peer"
+                  required
+                />
+              </app-card>
+              <app-card [subTitle]="'Medico'" [inputName]="'doctor'">
+                <input
+                  type="radio"
+                  id="doctor"
+                  formControlName="specialty"
+                  name="specialty"
+                  value="doctor"
+                  class="hidden peer"
+                  required
+                />
+              </app-card>
+            </ul>
+          </div>
+
+          <div class="mt-4 space-y-6">
+            <div
+              class="fadeIn"
+              [ngClass]="formRegister.value['specialty'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="name"
+              >
+                Nombre
+              </label>
+              <input
+                formControlName="name"
+                name="name"
+                id="name"
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                placeholder="Nombre"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['name'].errors?.['required'] && formRegister.controls['name'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['name'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="lastName"
+              >
+                Apellido
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                formControlName="lastName"
+                name="lastName"
+                id="lastName"
+                placeholder="Apellido"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['lastName'].errors?.['required'] && formRegister.controls['lastName'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['lastName'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="email"
+              >
+                Mail
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                placeholder="exa@mail.com"
+                formControlName="email"
+                name="email"
+                id="email"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['email'].errors?.['required'] && formRegister.controls['email'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['email'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="socialWorks"
+              >
+                Obra Social
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                placeholder="Obra Social"
+                formControlName="socialWorks"
+                name="socialWorks"
+                id="socialWorks"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['socialWorks'].errors?.['required'] && formRegister.controls['socialWorks'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['socialWorks'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="age"
+              >
+                Edad
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                placeholder="Edad"
+                formControlName="age"
+                name="age"
+                id="age"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['age'].errors?.['required'] && formRegister.controls['age'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['age'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="dni"
+              >
+                DNI
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                placeholder="411111111111111"
+                autocomplete="off"
+                type="text"
+                formControlName="dni"
+                name="dni"
+                id="dni"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['dni'].errors?.['required'] && formRegister.controls['dni'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['dni'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="password"
+              >
+                Password
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                placeholder="*********"
+                autocomplete="off"
+                type="password"
+                formControlName="password"
+                name="password"
+                id="password"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['password'].errors?.['required'] && formRegister.controls['password'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['password'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="images"
+              >
+                Ingresar 2 imagenes
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                autocomplete="off"
+                type="file"
+                formControlName="images"
+                name="images"
+                id="images"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['images'].errors?.['required'] && formRegister.controls['images'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['images'] ? 'block' : 'hidden'"
+            >
+              <button
+                class="items-center justify-center w-full px-6 py-2.5 text-center disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-100 cursor-pointer text-white duration-200 bg-black border-2 border-black rounded-full nline-flex hover:bg-transparent hover:border-black hover:text-black focus:outline-none focus-visible:outline-black text-sm focus-visible:ring-black"
+                type="submit"
+                [disabled]="formRegister.invalid || isLoading"
+              >
+                Crear cuenta
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="hidden bg-white lg:block lg:flex-1 lg:relative sm:contents">
+      <div
+        class="absolute inset-0 object-cover w-full h-full bg-white"
+        alt=""
+        height="1866"
+        width="1664"
+      >
+        <img
+          class="object-center w-full h-auto bg-gray-200"
+          src="https://d33wubrfki0l68.cloudfront.net/64c901dbc4b16388ef27646a320ad9c1441594df/236fd/images/placeholders/rectangle2.svg"
+          alt=""
+          width="1310"
+          height="873"
+        />
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "tp-clinica-84bed": {
+      "hosting": {
+        "tp-clinica": [
+          "tp-clinica-84bed"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "tp-clinica-84bed"
+  }
+}

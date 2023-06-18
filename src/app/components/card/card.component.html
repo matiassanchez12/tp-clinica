@@ -1,0 +1,25 @@
+<li class="relative">
+  <ng-content></ng-content>
+
+  <label
+    for="{{ inputName }}"
+    class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-indigo-500 peer-checked:border-indigo-600 peer-checked:text-indigo-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+  >
+    <div class="block">
+      <div class="w-full text-lg font-semibold">{{ title }}</div>
+      <div class="w-full">{{ subTitle }}</div>
+    </div>
+  </label>
+
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    class="fill-indigo-500 hidden peer-checked:block dark:peer-checked:block absolute top-1 right-1"
+    viewBox="0 0 256 256"
+  >
+    <path
+      d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"
+    ></path>
+  </svg>
+</li>

@@ -1,0 +1,50 @@
+<ng-container *ngIf="isOpenModal">
+  <div
+    class="relative z-10 transition duration-300"
+    [ngClass]="isOpenModal ? 'block opacity-100' : 'hidden opacity-0'"
+    aria-labelledby="modal-title"
+    role="dialog"
+    #modalBack
+  >
+    <div
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+    ></div>
+
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+      <div
+        class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+      >
+        <div
+          class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+        >
+          <div class="bg-gray-50 px-4 py-3 flex justify-between sm:px-6">
+            <h4 class="font-medium">{{ title }}</h4>
+            <button
+              type="button"
+              class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-2 py-1 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+              (click)="closeModal()"
+            >
+              <svg
+                fill="none"
+                stroke="#605f5f"
+                class="fill-black w-4 h-4"
+                stroke-width="2.5"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <ng-content></ng-content>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,110 @@
+<div class="mx-auto rounded-lg pt-24">
+  <!-- headaer -->
+  <div class="px-5 py-5 flex justify-between items-center bg-white border-b-2">
+    <div class="font-semibold text-2xl">Sala de chat</div>
+  </div>
+  <!-- end header -->
+  <!-- Chatting -->
+
+  <div
+    class="flex flex-row justify-between bg-white h-[80vh] max-h-full overflow-hidden"
+  >
+    <!-- userlist -->
+    <div class="flex flex-col w-2/5 border-r-2 h-full overflow-y-auto relative">
+      <div class="border-b-2 py-4 px-2">
+        <input
+          type="text"
+          placeholder="search chatting"
+          class="py-2 px-2 border-2 border-gray-200 rounded-2xl w-full"
+        />
+      </div>
+
+      <p
+        class="absolute top-0 bottom-0 left-0 right-0 translate-x-1/2 translate-y-1/2"
+        [ngClass]="isLoading ? 'block' : 'hidden'"
+      >
+        Cargando..
+      </p>
+
+      <ul class="overflow-y-auto h-full">
+        <li
+          *ngFor="let user of usersSubscription | async"
+          class="flex-row py-4 px-2 justify-center items-center border-b-2 hover:bg-slate-50 cursor-pointer transition"
+          [ngClass]="{
+            'bg-slate-200': userSelected === user.id,
+            'bg-inherit': userSelected !== user.id,
+            hidden: userLogged?.uid === user.id,
+            flex: userLogged?.uid !== user.id
+          }"
+          (click)="handleClickChat(user.id || '')"
+        >
+          <div class="w-1/4">
+            <ngx-avatars name="{{ user.name }}"></ngx-avatars>
+          </div>
+
+          <div class="w-full">
+            <div class="text-lg font-semibold">{{ user.name }}</div>
+            <span class="text-gray-500">Mensaje ultimo</span>
+          </div>
+        </li>
+      </ul>
+
+      <!-- end user list -->
+    </div>
+    <!-- end chat list -->
+
+    <!-- message -->
+    <div class="w-full max-h-full px-5 flex flex-col justify-between">
+      <div
+        class="justify-center items-center margin-auto h-full text-emerald-400"
+        [ngClass]="!userSelected ? 'flex' : 'hidden'"
+      >
+        Seleccione un chat!
+      </div>
+
+      <div
+        #chatContainer
+        autoScrollDown
+        class="flex-col mt-5 overflow-y-auto"
+        [ngClass]="userSelected ? 'flex' : 'hidden'"
+      >
+        <div
+          class="flex mb-4"
+          *ngFor="let message of currentChatMessages"
+          [ngClass]="
+            userLogged?.uid === message.sender_id
+              ? 'justify-end'
+              : 'justify-start'
+          "
+        >
+          <div>
+            <div
+              class="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white"
+            >
+              {{ message.content }}
+            </div>
+            <span class="ml-2 mt-2 text-gray-400 flex justify-end">
+              {{ message.timestamp | timeFromNowPipe }}
+            </span>
+          </div>
+
+          <ngx-avatars
+            [name]="getUserById(message.sender_id)?.name"
+          ></ngx-avatars>
+        </div>
+      </div>
+      <div class="py-5">
+        <input
+          class="w-full bg-gray-300 py-5 px-3 rounded-xl"
+          type="text"
+          placeholder="type your message here..."
+          [disabled]="userSelected ? false : true"
+          #inputField
+          (keyup.enter)="handleAddMessage(inputField.value)"
+          (keyup.enter)="inputField.value = ''"
+        />
+      </div>
+    </div>
+    <!-- end message -->
+  </div>
+</div>
