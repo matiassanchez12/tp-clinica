@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { IUser } from 'src/app/interfaces';
 import { AuthService } from 'src/app/services/auth.service';
 import { DbService } from 'src/app/services/db-service.service';
+import { FileService } from '../../services/file.service';
 
 @Component({
   selector: 'app-register',
@@ -38,6 +39,7 @@ export class RegisterComponent {
   public constructor(
     private fb: FormBuilder,
     private bdService: DbService,
+    private fileService: FileService,
     private toastr: ToastrService,
     private readonly authService: AuthService,
     private readonly router: Router
@@ -56,7 +58,10 @@ export class RegisterComponent {
       age: ['a', Validators.required],
       dni: ['a', Validators.required],
       socialWorks: ['a', Validators.required],
-      images: ['a', Validators.required],
+      images: [
+        [],
+        [Validators.required, Validators.minLength(2), this.validateImages],
+      ],
       specialty: ['a', Validators.required],
       email: [
         'a',
@@ -81,6 +86,8 @@ export class RegisterComponent {
         images,
         specialty,
       } = this.formRegister.value;
+
+      const imagesSelected: FileList = images;
 
       this.authService
         .signUp(
@@ -133,5 +140,20 @@ export class RegisterComponent {
         matchingControl.setErrors(null);
       }
     };
+  }
+
+  private validateImages(
+    control: AbstractControl
+  ): { [key: string]: any } | null {
+    const archivos: FileList = control.value;
+    console.log(archivos);
+    for (let i = 0; i < archivos.length; i++) {
+      const archivo = archivos[i];
+      const tipo = archivo.type;
+      if (tipo && !tipo.startsWith('image/')) {
+        return { imageFormat: true };
+      }
+    }
+    return { imageFormat: false };
   }
 }
