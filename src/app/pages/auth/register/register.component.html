@@ -1,0 +1,472 @@
+<section>
+  <div
+    class="relative flex justify-center min-h-screen overflow-hidden lg:px-0 md:px-12"
+  >
+    <div
+      class="relative z-10 flex flex-col flex-1 px-4 py-10 bg-white shadow-2xl lg:py-24 md:flex-none md:px-28 sm:justify-center"
+    >
+      <div class="mt-4 absolute top-0 left-10">
+        <a
+          routerLink="/auth/login"
+          class="font-semibold leading-6 text-sm cursor-pointer text-indigo-600 hover:text-indigo-500"
+          >Ir a Login</a
+        >
+      </div>
+      <div
+        class="w-full max-w-md h-full mx-auto md:max-w-sm md:px-0 md:w-96 sm:px-4"
+      >
+        <div class="flex flex-col mb-12">
+          <div>
+            <h2 class="text-4xl text-black">Comencemos!</h2>
+            <p class="mt-2 text-sm text-gray-500">
+              Para comenzar, crea tu cuenta.
+            </p>
+          </div>
+        </div>
+
+        <form [formGroup]="formRegister" (ngSubmit)="onSubmit()">
+          <p class="text-md text-red-500 px-2" *ngIf="userExist">
+            El email ingresado ya está siendo usado por otro usuario
+          </p>
+
+          <div>
+            <h3
+              class="mb-5 mt-8 text-sm font-medium text-gray-600 dark:text-white"
+            >
+              Seleccioná tu rol
+            </h3>
+
+            <ul class="grid w-full gap-6 md:grid-cols-2">
+              <app-card [subTitle]="'Paciente'" [inputName]="'patient'">
+                <input
+                  type="radio"
+                  id="patient"
+                  formControlName="type"
+                  name="type"
+                  value="patient"
+                  class="hidden peer"
+                  required
+                />
+              </app-card>
+              <app-card [subTitle]="'Especialista'" [inputName]="'specialist'">
+                <input
+                  type="radio"
+                  id="specialist"
+                  formControlName="type"
+                  name="type"
+                  value="specialist"
+                  class="hidden peer"
+                  required
+                />
+              </app-card>
+            </ul>
+          </div>
+
+          <div class="mt-4 space-y-6">
+            <div
+              class="fadeIn"
+              [ngClass]="formRegister.value['type'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="name"
+              >
+                Nombre
+              </label>
+              <input
+                formControlName="name"
+                name="name"
+                id="name"
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                placeholder="Nombre"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['name'].errors?.['required'] && formRegister.controls['name'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['name'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="lastName"
+              >
+                Apellido
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                formControlName="lastName"
+                name="lastName"
+                id="lastName"
+                placeholder="Apellido"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['lastName'].errors?.['required'] && formRegister.controls['lastName'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['lastName'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="email"
+              >
+                Mail
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                placeholder="exa@mail.com"
+                formControlName="email"
+                name="email"
+                id="email"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['email'].errors?.['required'] && formRegister.controls['email'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+              <small
+                class="text-red-500 block"
+                *ngIf="formRegister.controls['email'].errors?.['email'] && formRegister.controls['email'].touched"
+              >
+                Ingrese un email valido
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['email'] ? 'block' : 'hidden'"
+              *ngIf="isPatientUser"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="socialWorks"
+              >
+                Obra Social
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                placeholder="Obra Social"
+                formControlName="socialWorks"
+                name="socialWorks"
+                id="socialWorks"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['socialWorks'].errors?.['required'] && formRegister.controls['socialWorks'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="
+                (isPatientUser && formRegister.value['socialWorks']) ||
+                formRegister.value['email']
+                  ? 'block'
+                  : 'hidden'
+              "
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="age"
+              >
+                Edad
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                type="number"
+                placeholder="22"
+                formControlName="age"
+                name="age"
+                id="age"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['age'].errors?.['required'] && formRegister.controls['age'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="
+                formRegister.value['age'] && !isPatientUser ? 'block' : 'hidden'
+              "
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="profession"
+              >
+                Especialidad
+              </label>
+              <div class="flex">
+                <select
+                  id="profession"
+                  formControlName="profession"
+                  name="profession"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="" disabled>Seleccione una especialidad</option>
+
+                  <option
+                    *ngFor="let prof of professions"
+                    [value]="prof.profession"
+                  >
+                    {{ prof.profession }}
+                  </option>
+                </select>
+
+                <div class="w-5 flex justify-center items-center mx-2">
+                  <button
+                    class="rounded-full bg-cyan-100 p-1"
+                    (click)="onShowAddInput()"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="#000000"
+                      viewBox="0 0 256 256"
+                    >
+                      <path
+                        d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['profession'].errors?.['required'] && formRegister.controls['profession'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+
+              <div
+                class="flex fadeIn"
+                [ngClass]="showAddInput ? 'flex' : 'hidden'"
+              >
+                <div class="flex flex-col flex-1">
+                  <input
+                    type="text"
+                    placeholder="Ingresar especialidad o profesion"
+                    class="bg-gray-50 mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    (keydown)="onKeyDown($event)"
+                  />
+                  <span class="text-neutral-500 font-light text-sm pt-1"
+                    >Presionar [enter] para agregar</span
+                  >
+                </div>
+
+                <div class="w-5 flex justify-center items-center mx-2">
+                  <button
+                    class="rounded-full bg-cyan-100 p-1"
+                    (click)="onHiddeAddInput()"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="#000000"
+                      viewBox="0 0 256 256"
+                    >
+                      <path
+                        d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="
+                (isPatientUser && formRegister.value['age']) ||
+                formRegister.value['profession']
+                  ? 'block'
+                  : 'hidden'
+              "
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="dni"
+              >
+                DNI
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                placeholder="411111111111111"
+                autocomplete="off"
+                type="number"
+                formControlName="dni"
+                name="dni"
+                id="dni"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['dni'].errors?.['required'] && formRegister.controls['dni'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['dni'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="password"
+              >
+                Password
+              </label>
+              <input
+                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                placeholder="*********"
+                autocomplete="off"
+                type="password"
+                formControlName="password"
+                name="password"
+                id="password"
+              />
+              <small
+                class="text-red-500"
+                *ngIf="formRegister.controls['password'].errors?.['required'] && formRegister.controls['password'].touched"
+              >
+                Este campo es obligatorio
+              </small>
+              <small
+                class="text-red-500 block"
+                *ngIf="formRegister.controls['password'].errors?.['minlength'] && formRegister.controls['password'].touched"
+              >
+                Ingresar minimo 6 caracteres
+              </small>
+            </div>
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="formRegister.value['password'] ? 'block' : 'hidden'"
+            >
+              <label
+                class="block mb-3 text-sm font-medium text-gray-600"
+                name="images"
+              >
+                Foto de perfil
+              </label>
+              <input
+                class="block w-full mb-2 px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                autocomplete="off"
+                type="file"
+                name="file"
+                id="file"
+                [disabled]="
+                  isPatientUser && formRegister.value['images'].length === 1
+                "
+                (change)="onFileChange($event)"
+              />
+
+              <small
+                class="text-red-500 block"
+                *ngIf="formRegister.controls['file'].errors?.['imageFormat'] && formRegister.controls['file'].touched"
+              >
+                El archivo debe ser una imagen
+              </small>
+              <small
+                class="text-red-500 block"
+                *ngIf="isPatientUser && formRegister.value['images'].length < 1"
+              >
+                Debe subir 1 imagen para su perfil
+              </small>
+
+              <small
+                class="text-red-500 block"
+                *ngIf="
+                  !isPatientUser && formRegister.value['images'].length < 2
+                "
+              >
+                Debe subir al menos 2 imagenes
+              </small>
+
+              <div
+                class="flex gap-2 fadeIn"
+                *ngIf="formRegister.value['images'].length > 0"
+              >
+                <div
+                  *ngFor="let image of formRegister.value['images']"
+                  class="h-[8rem] w-[8rem]"
+                >
+                  <img
+                    [src]="image"
+                    [alt]="image"
+                    class="h-full w-full object-cover rounded-lg"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="col-span-full fadeIn mt-4"
+              [ngClass]="
+                formRegister.value['images'].length >= 1 ? 'block' : 'hidden'
+              "
+            >
+              <ngx-recaptcha2
+                #captchaElem
+                siteKey="6Lc6S7smAAAAAGm8CcQqMgVt92Yu2efWIcpZASJu"
+                size="normal"
+                hl="lang"
+                theme="light"
+                type="image"
+                formControlName="recaptcha"
+              >
+              </ngx-recaptcha2>
+            </div>
+
+            <div
+              class="col-span-full fadeIn"
+              [ngClass]="
+                formRegister.value['images'].length >= 1 ? 'block' : 'hidden'
+              "
+            >
+              <button
+                class="items-center justify-center w-full px-6 py-2.5 text-center disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-100 cursor-pointer text-white duration-200 bg-black border-2 border-black rounded-full nline-flex hover:bg-transparent hover:border-black hover:text-black focus:outline-none focus-visible:outline-black text-sm focus-visible:ring-black"
+                type="submit"
+                [disabled]="formRegister.invalid"
+              >
+                Crear cuenta
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="hidden bg-white lg:block lg:flex-1 lg:relative sm:contents">
+      <div
+        class="absolute inset-0 object-cover w-full h-full bg-white"
+        alt=""
+        height="1866"
+        width="1664"
+      >
+        <img
+          class="object-center w-full h-auto bg-gray-200"
+          src="https://d33wubrfki0l68.cloudfront.net/64c901dbc4b16388ef27646a320ad9c1441594df/236fd/images/placeholders/rectangle2.svg"
+          alt=""
+          width="1310"
+          height="873"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<ngx-ui-loader></ngx-ui-loader>

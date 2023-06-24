@@ -10,15 +10,11 @@ export class FileService {
   uploadFileToCloud(file: File) {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'matias'); // Preset de Cloudinary
+    formData.append('upload_preset', 'matias');
 
-    this.http
-      .post(
-        'https://api.cloudinary.com/v1_1/matiaskaufman/image/upload',
-        formData
-      )
-      .subscribe((response: any) => {
-        console.log(response);
-      });
+    return this.http.post(
+      'https://api.cloudinary.com/v1_1/matiaskaufman/image/upload',
+      formData
+    );
   }
 }

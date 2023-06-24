@@ -1,8 +1,7 @@
 {
   "hosting": {
-    "target": "tp-clinica",
-    "public": "dist/tp-clinica",
     "site": "tp-clinica-84bed",
+    "public": "dist/tp-clinica",
     "ignore": [
       "**/.*"
     ],

@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Output,
-  Renderer2,
-} from '@angular/core';
+import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -14,48 +8,29 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent {
-  public userLogged: string | null = null;
   public openUserOptions: boolean = false;
+  public showNavbar: boolean = false;
   public currentUrl: string = '';
   public isOpenSidebar: boolean = false;
 
-  constructor(
-    private authService: AuthService,
-    private renderer: Renderer2,
-    private readonly router: Router
-  ) {
-    authService.getCurrentUser().subscribe((user) => {
-      if (user) {
-        this.userLogged = user.email;
-        return;
-      }
-      this.userLogged = null;
-    });
-  }
+  constructor(private readonly router: Router) {}
 
   ngOnInit() {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.currentUrl = event.url;
+    this.router.events.subscribe((event: any) => {
+      if (event.routerEvent instanceof NavigationEnd) {
+        const urlsHiddenNavbar = ['/auth', '/admin'];
+
+        this.showNavbar = !urlsHiddenNavbar.some((url) =>
+          event.routerEvent.url.includes(url)
+        );
+
+        this.currentUrl = event.routerEvent.url;
       }
     });
   }
 
-  async onClick() {
-    if (this.userLogged) {
-      this.openUserOptions = !this.openUserOptions;
-      return;
-    }
-
-    this.router.navigate(['/login']);
-  }
-
-  async onLogout() {
-    this.openUserOptions = false;
-
-    await this.authService.signOut();
-
-    this.router.navigate(['/']);
+  onClick() {
+    this.router.navigate(['/auth/login']);
   }
 
   openSidebar() {

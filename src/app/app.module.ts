@@ -4,7 +4,12 @@ import { AngularFireModule, FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { WhoiamComponent } from './landing/whoiam/whoiam.component';
+import {
+  WhoiamComponent,
+  AdminModule,
+  AuthModule,
+  WelcomeComponent,
+} from './pages';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
@@ -15,9 +20,10 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { WelcomeComponent } from './landing/welcome/welcome.component';
-import { AdminModule } from './admin/admin.module';
-import { AuthModule } from './auth/auth.module';
+import { UserTableComponent } from './components/tables/user-table/user-table.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { LoggedGuard } from './guards';
 
 @NgModule({
   declarations: [
@@ -26,6 +32,7 @@ import { AuthModule } from './auth/auth.module';
     ModalComponent,
     NavbarComponent,
     WelcomeComponent,
+    UserTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +42,7 @@ import { AuthModule } from './auth/auth.module';
     BrowserAnimationsModule,
     AdminModule,
     AuthModule,
+    NgxUiLoaderModule,
     ToastrModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
@@ -42,7 +50,10 @@ import { AuthModule } from './auth/auth.module';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
   ],
-  providers: [{ provide: FIREBASE_OPTIONS, useValue: environment.firebase }],
+  providers: [
+    { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
+    LoggedGuard,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
